@@ -1,20 +1,16 @@
 pipeline {
-    agent any
-
+    agent none
     stages {
-        stage('Build') {
-            steps {
-                echo 'Building..'
+        stage ('Latest SWP') {
+            agent { 
+                label 'local'
             }
-        }
-        stage('Test') {
             steps {
-                echo 'Testing..'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying....'
+                script {
+                    sh ''' #!/bin/bash
+                    ls -Art ../../swp/*.swp | tail -n 1 | awk -F "-" '{print substr($4, 1, length($4)-4)}'
+                    '''
+                    }
             }
         }
     }
